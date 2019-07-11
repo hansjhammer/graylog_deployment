@@ -1,6 +1,11 @@
-#basierend auf https://www.bro.org/sphinx/install/install.html
 #bei Fehler abbrechen
 set -e
+err_report() {
+    echo "Error on line $1"
+}
+
+trap 'err_report $LINENO' ERR
+
 #dieses SKript muss aus dem Verzeichnis ausgeführt werden
 #cp ../config ~
 #cp server.conf ~
@@ -8,7 +13,7 @@ set -e
 #cd ~
 # Verwende google-nameserver, andere machen Probleme
 echo "starting bootstrap.."
-source config
+. config
 sudo sed -ir 's/[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*/8.8.8.8/g' /etc/resolv.conf
 sudo apt update
 #default-jre funktioniert nicht (vers. 11.0.1)
@@ -40,7 +45,7 @@ wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add 
 echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" | sudo tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list
 sudo apt-get update && sudo apt-get install elasticsearch
   
-sudo mv server.conf /etc/graylog/server/server.conf
+sudo cp server.conf /etc/graylog/server/server.conf
 
 ###### ersetze Werte aus der server.conf von graylog mit eigenen Werten aus der config-Datei
 sudo sed -i "s@REST_LISTEN_URI@http://$MY_IP@g" /etc/graylog/server/server.conf
