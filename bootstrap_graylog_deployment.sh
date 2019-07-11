@@ -68,8 +68,8 @@ password=$(echo -n $GRAYLOG_PASSWORD | shasum -a 256 | cut -d " " -f1)
 sudo sed -i "s@root_password_sha2 =@root_password_sha2 =$password@g" /etc/graylog/server/server.conf
 
 sudo wget -p /etc/graylog/server/ https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
-sudo tar xf /etc/graylog/server/GeoLite2-City.tar.gz
-sudo cp /etc/graylog/server/GeoLite2*/GeoLite2-City.mmdb .
+sudo tar xf geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
+sudo cp GeoLite2*/GeoLite2-City.mmdb  /etc/graylog/server/
 
 #passwort für graylog erstellen und in server.conf einfügen
 echo aa35a44f-c221-460d-ac09-5013ad61339a >> node-id && sudo mv node-id /etc/graylog/server/node-id
