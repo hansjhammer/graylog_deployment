@@ -14,7 +14,8 @@ trap 'err_report $LINENO' ERR
 # Verwende google-nameserver, andere machen Probleme
 echo "starting bootstrap.."
 . config
-sudo sed -ir 's/[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*/8.8.8.8/g' /etc/resolv.conf
+#Entkommentieren falls Probleme mit der Namensauflösung auftreten
+#sudo sed -ir 's/[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*/8.8.8.8/g' /etc/resolv.conf
 sudo apt update
 #default-jre funktioniert nicht (vers. 11.0.1)
 sudo apt install -y apt-transport-https openjdk-8-jre-headless uuid-runtime pwgen
@@ -67,8 +68,8 @@ password=$(echo -n $GRAYLOG_PASSWORD | shasum -a 256 | cut -d " " -f1)
 #füge erstelltes PW in die server.conf von graylog
 sudo sed -i "s@root_password_sha2 =@root_password_sha2 =$password@g" /etc/graylog/server/server.conf
 
-sudo wget -p /etc/graylog/server/ https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
-sudo tar xf geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
+sudo wget https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
+sudo tar xf GeoLite2-City.tar.gz
 sudo cp GeoLite2*/GeoLite2-City.mmdb  /etc/graylog/server/
 
 #passwort für graylog erstellen und in server.conf einfügen
